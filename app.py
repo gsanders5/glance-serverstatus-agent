@@ -22,8 +22,8 @@ def get_system_info():
         "platform": platform.system(),
         "cpu": {
             "load_is_available": True,
-            "load1_percent": int(psutil.getloadavg()[0] * 100),
-            "load15_percent": int(psutil.getloadavg()[2] * 100),
+            "load1_percent": int((psutil.getloadavg()[0] / psutil.cpu_count()) * 100),
+            "load15_percent": int((psutil.getloadavg()[2] / psutil.cpu_count()) * 100),
             "temperature_is_available": True,
             "temperature_c": get_cpu_temperature()
         },
