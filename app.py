@@ -22,15 +22,15 @@ def get_system_info():
         "platform": platform.system(),
         "cpu": {
             "load_is_available": True,
-            "load1_percent": int((psutil.getloadavg()[0] / psutil.cpu_count()) * 100),
-            "load15_percent": int((psutil.getloadavg()[2] / psutil.cpu_count()) * 100),
+            "load1_percent": min(int((psutil.getloadavg()[0] / psutil.cpu_count()) * 100), 100), #for some reason returns values >=100, gotta fix later
+            "load15_percent": min(int((psutil.getloadavg()[2] / psutil.cpu_count()) * 100), 100),
             "temperature_is_available": True,
             "temperature_c": get_cpu_temperature()
         },
         "memory": {
             "memory_is_available": True,
             "total_mb": psutil.virtual_memory().total // (1024 * 1024),
-            "used_mb": psutil.virtual_memory().used // (1024 * 1024),
+            "used_mb": psutil.virtual_memory().total // (1024 * 1024) - psutil.virtual_memory().available // (1024 * 1024),
             "used_percent": int(psutil.virtual_memory().percent),
             "swap_is_available": True,
             "swap_total_mb": psutil.swap_memory().total // (1024 * 1024),
