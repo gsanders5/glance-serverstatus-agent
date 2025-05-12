@@ -5,14 +5,10 @@ import psutil
 import time
 import os
 from flask import Flask, jsonify, request, abort
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 
-SECRET_TOKEN = os.getenv("SECRET_TOKEN", "default-token")
-PORT = int(os.getenv("PORT", 8080))
+SECRET_TOKEN = os.environ.get("SECRET_TOKEN", "glance_agent_token")
 
 def get_system_info():
     info = {
@@ -22,7 +18,7 @@ def get_system_info():
         "platform": platform.system(),
         "cpu": {
             "load_is_available": True,
-            "load1_percent": min(int((psutil.getloadavg()[0] / psutil.cpu_count()) * 100), 100), #for some reason returns values >=100, gotta fix later
+            "load1_percent": min(int((psutil.getloadavg()[0] / psutil.cpu_count()) * 100), 100), 
             "load15_percent": min(int((psutil.getloadavg()[2] / psutil.cpu_count()) * 100), 100),
             "temperature_is_available": True,
             "temperature_c": get_cpu_temperature()
@@ -69,4 +65,4 @@ def sysinfo():
     return jsonify(info)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=PORT)
+    app.run(host='0.0.0.0', port=8080)
